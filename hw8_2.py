@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Dec 13 20:28:04 2012
-
-@author: tsbertalan
-"""
 import numpy as np
 exp = np.exp
 ln = np.log
@@ -36,22 +30,19 @@ def Eandg(ksi, l):
         return eta_
         
     def Qin_f(r, gl):
-        print "Qin_f"
         Qin_ = z
-        count = 0
         for (t, g) in zip(tl, gl):
             if t <= r:
                 Qin_ -= 4 * pi * t ** 2 * g * dt
-                cout += 1
-        print count
         return Qin_
     
     def Ueff_f(r, gl):
         sum_ = -z * ksi
+        Qin_ = ksi * Qin_f(r, gl)
         for (t, g) in zip (tl, gl):
             if t >= r:
                 sum_ += 4 * pi * ksi * t * g * dt
-        return sum_
+        return sum_ - Qin_
         
     def gl_f(r, gl):
         return exp(-Ueff_f(r, gl)) / eta_f(gl)
@@ -75,6 +66,9 @@ def Eandg(ksi, l):
     
 for (ksi, l, i) in zip([1/5., 1./50, 1./2], [0.1, .5, 0.02], range(4)):
     (energy, pairCorrelation) = Eandg(ksi, l)
+    pairCorrelation.reverse()
+    pairCorrelation.reverse()
+    pairCorrelation.reverse()
     pairCorrelation.reverse()
     ax[i].plot(tl, pairCorrelation)
     ax[i].set_title(r'$\xi = %.2f$'%ksi)
